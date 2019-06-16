@@ -1,0 +1,266 @@
+﻿<Page x:Class="MVVM_WareHouse.View.ManagementPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MVVM_WareHouse.View"
+      mc:Ignorable="d" 
+      Height="520" Width="1010" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="#4592af"
+      Title="ManagementPage">
+
+    <Page.Resources>
+        <ControlTemplate x:Key="ButtonStyle" TargetType="Button">
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8,8,8,8" x:Name="PART_Background">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                        <GradientStop Color="White" Offset="0.0" />
+                        <GradientStop Color="Silver" Offset="0.5" />
+                        <GradientStop Color="White" Offset="0.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="PART_Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="LightGray" Offset="0.0" />
+                                <GradientStop Color="Gray" Offset="0.5" />
+                                <GradientStop Color="LightGray" Offset="0.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="0" Opacity="0.6" RenderingBias="Performance" ShadowDepth="0" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="PART_Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="Silver" Offset="0.0" />
+                                <GradientStop Color="White" Offset="0.5" />
+                                <GradientStop Color="Silver" Offset="0.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Name="Delete" Header="Delete" Click="DeleteUser"/>
+        </ContextMenu>
+    </Page.Resources>
+
+    <Grid Height="520" Width="1010">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="87*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="10" Background="#454d66"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox">
+
+            <TextBlock Text="WELCOME!-- MY BIG BIG BOSS!!!"
+                       FontSize="30" Foreground="#fcf9ec" 
+                       TextAlignment="Center" VerticalAlignment="Center"/>
+
+        </Grid>
+
+        <Grid  Grid.Row="1" Grid.Column="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid x:Name="UserList" ItemsSource="{Binding UsersList}" ContextMenu="{StaticResource ContextMenu}" PreviewMouseLeftButtonDown="CollapsedSearchInputBox"
+                  CanUserResizeColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" AutoGenerateColumns="False" 
+                  IsReadOnly="True" Background="#d8eff0" Grid.Column="0" Margin="0,0,5,5">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" />
+                    <DataGridTextColumn Header="IsAdmin" Binding="{Binding Path=IsAdmin}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <Grid x:Name="Normal_AddGridStateContainer" Grid.Row="0" Grid.Column="0" Margin="5" Background="MediumPurple" 
+                          MouseLeftButtonDown="ChangeAddUserGridState"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox" PreviewMouseRightButtonDown="GirdClickEffect" MouseRightButtonUp ="GirdClickEffectReCover">
+                        <TextBlock x:Name="Normal_AddGridTrigger" Text="Add" TextAlignment="Center" VerticalAlignment="Center" FontSize="28" Foreground="GhostWhite"/>
+                    </Grid>
+
+                    <Grid x:Name="QueryContainer" Grid.Row="0" Grid.Column="1" Margin="5" Background="Pink" PreviewMouseRightButtonDown="GirdClickEffect" MouseRightButtonUp ="GirdClickEffectReCover"
+                          MouseLeftButtonDown="QueryAllUsers"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox">
+                        <TextBlock Text="Query" TextAlignment="Center" VerticalAlignment="Center" FontSize="28" Foreground="DarkSlateGray"/>
+                    </Grid>
+
+                    <Grid x:Name="SearchContainer" MouseLeftButtonDown="ChangeSearchInputBoxState"  PreviewMouseRightButtonDown="GirdClickEffect" MouseRightButtonUp ="GirdClickEffectReCover"
+                        Grid.Row="1" Grid.Column="0" Margin="5" Background="LightGoldenrodYellow">
+                        <TextBlock Text="Search" TextAlignment="Center" VerticalAlignment="Center" FontSize="28" Foreground="DarkSeaGreen"/>
+                    </Grid>
+
+                    <Grid x:Name="SearchInputContainer" Grid.Row="1" Grid.Column="1" Margin="5" Background="Gainsboro" Visibility="Collapsed">
+                        <TextBox x:Name="SearchInput" PreviewKeyDown="OnEnterClick" LostFocus="OnSearchInputLostFocus"
+                                 Width="60" Height="40" FontSize="20" Background="DarkGray" TextAlignment="Center"
+                                 Foreground="Aqua" VerticalAlignment="Center" HorizontalAlignment="Center" BorderThickness="3" BorderBrush="SlateGray"/>
+                    </Grid>
+                </Grid>
+
+                <Grid x:Name="Add_ClockGrid" Grid.Row="1" Background="LightBlue" Margin="5"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox">
+
+                    <Grid x:Name="AddUserGrid" Visibility="Collapsed">
+                        <Label Content="ID:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="31" VerticalAlignment="Center" Margin="50,15,0,157.333"  />
+                        <TextBox x:Name="IDInput" TextAlignment="Center"
+                               Background="DarkGray" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="91,15,41.667,0" />
+                        
+                        <Label Content="Name:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="52" VerticalAlignment="Center" Margin="28,51,0,121.333"  />
+                        <TextBox x:Name="NameInput" TextAlignment="Center"
+                                Background="DarkGray" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="91,53,41.667,0" />
+                        
+                        <Label Content="Password:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="76" VerticalAlignment="Center" Margin="8,92,0,80.333"  />
+                        <TextBox x:Name="PasswordInput" TextAlignment="Center" PreviewKeyDown="BlockTabKey"
+                                 Background="DarkGray" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="91,93,41.667,0" />
+
+                        <TextBlock x:Name="WarningText" Foreground="Red" TextAlignment="Center" VerticalAlignment="Center" Margin="0,120,0,61.333"/>
+
+                        <Grid Background="MediumPurple" Margin="41,140,40.667,18.333" MouseLeftButtonDown="SubmitUserInfo" > 
+                            <TextBlock Text="Submit" TextAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="GhostWhite"/>
+                        </Grid>
+                    </Grid>
+
+                    <Grid x:Name="NormalGrid" Visibility="Visible"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox">
+                        <TextBlock Name="tBlockTime"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Foreground="#00334e"/>
+                    </Grid>
+                    
+                </Grid>
+
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10"  PreviewMouseLeftButtonDown="CollapsedSearchInputBox">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <Grid Grid.Row="0" Grid.Column="0" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0" Margin="5" Background="#b0deff"></Grid>
+
+                <Grid Grid.Row="0" Grid.Column="1" Margin="5"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="5"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1" Margin="5" Background="#454d66">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="GhostWhite" Text="虚"/>
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Row="0" Grid.Column="1" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0" Margin="5"></Grid>
+
+                <Grid Grid.Row="0" Grid.Column="1" Margin="5" Background="#feb9c8"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="5" Background="#454d66">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="GhostWhite" Text="位"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1" Margin="5"></Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="0" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0" Margin="5"></Grid>
+
+                <Grid Grid.Row="0" Grid.Column="1" Margin="5" Background="#454d66">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="GhostWhite" Text="以"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="5" Background="#b0e0a8"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1" Margin="5"></Grid>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="1" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0" Margin="5" Background="#454d66">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="40" Foreground="GhostWhite" Text="待"/>
+                </Grid>
+
+                <Grid Grid.Row="0" Grid.Column="1" Margin="5"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="0" Margin="5"></Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1" Margin="5" Background="#fcf594"></Grid>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Page>

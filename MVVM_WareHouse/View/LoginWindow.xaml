@@ -1,0 +1,53 @@
+﻿<Window x:Class="MVVM_WareHouse.View.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:MVVM_WareHouse.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:localViewModel="clr-namespace:MVVM_WareHouse.ViewModel.Helper"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="400" Width="800" WindowStyle="None" ResizeMode="NoResize" MouseLeftButtonDown="DragWindow">
+
+    <Grid>
+        <Grid Height="25" VerticalAlignment="Top" Background="#3C464F">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
+            </Grid.Effect>
+            <Button x:Name="hideBtn" Margin="734,3,41,2" Height="auto"  RenderTransformOrigin="-12.5,-0.1" Background="#FFF3CD21" Click="HideWindow"/>
+            <Button x:Name="closeBtn" Margin="764,3,10.333,2" Height="auto"  RenderTransformOrigin="-12.5,-0.1" Background="#FFF32121"  
+                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Click="CloseWindow"/>
+        </Grid>
+
+        <Grid FocusManager.FocusedElement="{Binding ElementName=UserLogin}" Height="375" VerticalAlignment="Bottom" Background="#3C464F">
+            <ItemsControl Background="#3C464F" VerticalAlignment="Center" Height="316" Margin="0,49,0,10"  >
+                <TextBlock Margin="59,0,334,0" Height="47" Text="LOGIN PAGE" FontSize="40" TextAlignment="Left" FontWeight="Thin" Foreground="#EBB129" />
+               
+                <StackPanel Width="560" Height="40" Margin="40,20,0,0" OpacityMask="Black" Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" Text="Account" FontSize="24" Width="107" Foreground="#EBB129" FontWeight="Thin" />
+                    <TextBox x:Name="UserLogin" Text="{Binding UserIDInput, Mode=OneWayToSource , NotifyOnSourceUpdated=True , UpdateSourceTrigger=PropertyChanged}"
+                             Width="244" Height="40" HorizontalAlignment="Left" Margin="70,0,0,0" FontWeight="Bold" Background="White" FontSize="18" Foreground="Black" BorderThickness="0"/>
+                    <TextBlock x:Name="UserAccountError" Text="{Binding User_ID_Error_Text}"
+                               MinWidth="10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                </StackPanel>
+                
+                <StackPanel  Width="560" Height="40" Margin="40,20,0,0" OpacityMask="Black" Orientation="Horizontal">
+                    <TextBlock TextWrapping="WrapWithOverflow" Text="Password" FontSize="24" Width="107" Foreground="#EBB129" FontWeight="Thin" />
+                    <PasswordBox x:Name="UserPassword" localViewModel:PasswordBoxHelper.Password="{Binding Path=UserPasswordInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                 Width="244" Height="40" HorizontalAlignment="Left" Margin="70,0,0,0" FontWeight="Light" Background="White" FontSize="18" Foreground="Black" >
+                        <i:Interaction.Behaviors>
+                            <localViewModel:PasswordBoxBehavior/>
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
+                    <TextBlock x:Name="UserPasswordError" Text="{Binding User_Password_Error_Text }"
+                               MinWidth="10" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="LightGray" />
+                </StackPanel>
+                <Button Background="#FFEBB129" Command="{Binding LoginCommand}" Margin="254,20" Content="LOGIN" BorderBrush="{x:Null}" FontSize="22" FontWeight="Thin" Foreground="#FF3C464F" Width="119" Height="36" />
+
+                <Button Click="ForgotPassword"
+                    Background="#FFEBB129" Margin="225,0,224,0" Content="Forget Your Password?" BorderBrush="{x:Null}" FontSize="14" FontWeight="Thin" Foreground="#FF3C464F" Height="33"/>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</Window>

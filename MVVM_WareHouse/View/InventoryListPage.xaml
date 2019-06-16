@@ -1,0 +1,94 @@
+﻿<Page x:Class="MVVM_WareHouse.View.InventoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MVVM_WareHouse.View"
+      mc:Ignorable="d" 
+      Height="520" Width="1010" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="LightGray"
+      Title="InventoryPage">
+
+    <Page.Resources>
+        <ContextMenu x:Key="ContextMenu">
+            <MenuItem Name="Delete" Header="Delete" Click="DeleteGoods"/>
+        </ContextMenu>
+    </Page.Resources>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="400*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="0" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="0,0,1,0" />
+
+        <Grid x:Name="LeftButtons" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Background="#71a0a5">
+            <!--<Button Content="Search" Click="SearchBegin"
+                    HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Top" Width="80" BorderThickness="1"/>
+
+            <TextBox x:Name="SearchInput" Visibility="Collapsed" Background="LightGray"
+                     HorizontalAlignment="Center" VerticalAlignment="Top" Width="80" BorderThickness="0" Margin="16,97,16,0"/>-->
+
+
+            <ListView x:Name="ListViewMenu" Foreground="#EBB129" Background="#3C464F" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <!--Place holder-->
+                <ListViewItem x:Name="PlaceHolder" Height="50">
+                    <TextBlock Width="96" Height="19" TextAlignment="Center" VerticalAlignment="Center">INVENTORY</TextBlock>
+                </ListViewItem>
+
+                <ListViewItem x:Name="ShowAllList" Height="50" MouseLeftButtonUp="ShowAllGoods" Cursor="Hand" >
+                    <StackPanel Orientation="Horizontal" Width="95" >
+                        <Image Width="30" Height="30" Margin="35,0,0,0" Source="../Icon/FullList.png"  />
+                    </StackPanel>
+                </ListViewItem>
+
+                <ListViewItem x:Name="SearchButton" Height="50" MouseLeftButtonUp="SearchBegin" Cursor="Hand" >
+                    <StackPanel Orientation="Horizontal" Width="95" >
+                        <Image x:Name="image"  Width="30" Height="30" Margin="35,0,0,0" Source="../Icon/Search.png"  />
+                    </StackPanel>
+                </ListViewItem>
+
+                <ListViewItem x:Name="SearchInputContainer" Height="50" Visibility="Collapsed" >
+                    <StackPanel Orientation="Horizontal" Width="95" >
+                        <TextBox  PreviewKeyUp="OnEnterClick" LostFocus="OnSearchInputLostFocus"
+                            x:Name="SearchInput" Width="95" Background="LightGray" />
+                    </StackPanel>
+                </ListViewItem>
+
+                <ListViewItem x:Name="AddButton" Height="50" MouseLeftButtonUp="OpenStockWindow" Cursor="Hand" >
+                    <StackPanel Orientation="Horizontal" Width="95" >
+                        <Image Width="30" Height="30" Margin="35,0,0,0" Source="../Icon/Stock.png" />
+                    </StackPanel>
+                </ListViewItem>
+
+            </ListView>
+
+        </Grid>
+
+        <DataGrid x:Name="GoodsList" ItemsSource="{Binding GoodsList}" ContextMenu="{StaticResource ContextMenu}"
+                  Grid.Column="1" Grid.RowSpan="3"
+                  CanUserResizeColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" AutoGenerateColumns="False" 
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Path=Type}" />
+                <DataGridTextColumn Header="Price" Binding="{Binding Path=Price}" />
+                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Path=Manufacturer}" />
+                <DataGridTextColumn Header="StorageAmount" Binding="{Binding Path=StorageAmount}" />
+                <DataGridTextColumn Header="StorageTime" Binding="{Binding Path=StorageTime}" />
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </Grid>
+</Page>

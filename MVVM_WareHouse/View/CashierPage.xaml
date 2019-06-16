@@ -1,0 +1,259 @@
+﻿<Page x:Class="MVVM_WareHouse.View.CashierPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:input="clr-namespace:System.Windows.Input;assembly=PresentationCore"
+      xmlns:local="clr-namespace:MVVM_WareHouse.View"
+      mc:Ignorable="d" 
+      Height="520" Width="1010" HorizontalAlignment="Center" VerticalAlignment="Center"  Background="LightGray"
+      Title="CashierPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid x:Name="GoodsList" ItemsSource="{Binding TransactionsList}" Grid.Column="0" Grid.Row="0"
+                  CanUserResizeColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False" AutoGenerateColumns="False" 
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Path=Goods.ID}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Path=Goods.Name}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Path=Goods.Type}" />
+                <DataGridTextColumn Header="Price" Binding="{Binding Path=Goods.Price}" />
+                <DataGridTextColumn Header="Amount" IsReadOnly="False" Binding="{Binding Path=TransactionAmount, Mode=TwoWay}" />
+                <DataGridTextColumn Header="Total-Price" IsReadOnly="False" Binding="{Binding Path=Turnover}" />
+            </DataGrid.Columns>
+
+
+        </DataGrid>
+
+        <Grid x:Name="AppendNewTransactionContainer" Grid.Column="1" Grid.Row="0" Background="#393e46">
+
+            <TextBlock  Text="" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Margin="11,10,10,382"/>
+
+            <Label Content="Goods-ID:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="69" Margin="64,62,0,333" VerticalAlignment="Center" />
+            <ComboBox x:Name="GoodsID" ItemsSource="{Binding GoodsIDList}" SelectedValue="{Binding Path=TargetGoods.ID, Mode=OneWay}" 
+                      SelectionChanged="UpdateTargetGoods"
+                      IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"
+                      HorizontalAlignment="Left" Margin="138,62,0,0" VerticalAlignment="Top" Width="100"  Background="LightGray"/>
+
+            <Label Content="Name:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="69" Margin="64,103,0,292" VerticalAlignment="Center" />
+            <ComboBox x:Name="GoodsName" ItemsSource="{Binding GoodsNameList}" SelectedValue="{Binding Path=TargetGoods.Name, Mode=OneWay}" 
+                      SelectionChanged="UpdateTargetGoods"
+                      IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"
+                      HorizontalAlignment="Left" Margin="138,103,0,0" VerticalAlignment="Top" Width="100"  Background="LightGray"/>
+
+            <Label Content="Amount:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="70" Margin="68,150,0,244" VerticalAlignment="Center" />
+            <TextBox x:Name="AmountInput" TextChanged="TextBox_TextChanged" 
+                InputMethod.IsInputMethodEnabled="False" KeyDown="TxtIndex_KeyDown" PreviewKeyUp="OnEnterClick" 
+                Margin="138,150,62,0" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" RenderTransformOrigin="0.5,0.5" />
+
+
+            <Label Content="Type:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="46" Margin="87,198,0,197" VerticalAlignment="Center" />
+            <TextBlock x:Name="TypeTextBlock" Text="{Binding Path=TargetGoods.Type}"
+                InputMethod.IsInputMethodEnabled="False" KeyDown="TxtIndex_KeyDown"  
+                Margin="138,198,62,0" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" />
+
+
+            <Label Content="Storage Amount:" Foreground="White" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="116" Margin="22,247,0,148" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" />
+            <TextBlock x:Name="StorageAmountTextBlock" Text="{Binding Path=TargetGoods.StorageAmount}"
+                InputMethod.IsInputMethodEnabled="False" KeyDown="TxtIndex_KeyDown"  
+                Margin="138,247,62,0" Background="LightGray" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" />
+
+            <TextBlock x:Name="WarningText" Foreground="Red" Margin="87,278,46,112" TextAlignment="Center" VerticalAlignment="Center" />
+
+            <Button x:Name="ClearListButton" Click="ClearTransactionsList"
+                Content="Clear" HorizontalAlignment="Left" Margin="53,322,0,0" VerticalAlignment="Top" Width="80">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8,8,8,8" x:Name="PART_Background">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="White" Offset="0.0" />
+                                    <GradientStop Color="Silver" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="0.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="PART_Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="LightGray" Offset="0.0" />
+                                            <GradientStop Color="Gray" Offset="0.5" />
+                                            <GradientStop Color="LightGray" Offset="0.0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="10" Color="Black" Direction="0" Opacity="0.6" RenderingBias="Performance" ShadowDepth="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="PART_Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                            <GradientStop Color="White" Offset="0.5" />
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button x:Name="SubmitButton" Click="Submit" IsEnabled="False"
+                Content="Submit" HorizontalAlignment="Left" Margin="175,320,0,0" VerticalAlignment="Top" Width="90" Height="35">
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8,8,8,8" x:Name="PART_Background">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="White" Offset="0.0" />
+                                    <GradientStop Color="Silver" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="0.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="PART_Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="LightGray" Offset="0.0" />
+                                            <GradientStop Color="Gray" Offset="0.5" />
+                                            <GradientStop Color="LightGray" Offset="0.0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="10" Color="Black" Direction="0" Opacity="0.6" RenderingBias="Performance" ShadowDepth="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="PART_Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                            <GradientStop Color="White" Offset="0.5" />
+                                            <GradientStop Color="Silver" Offset="0.0" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </Grid>
+
+        <Grid x:Name="UserInfoContainer" Grid.Column="0" Grid.Row="1" Background="#a9c6de">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+
+                <TextBlock Text="Operator ID :" FontSize="18"
+                           TextAlignment="Center" VerticalAlignment="Center" Foreground="Black" Margin="56,10,176.667,67" />
+                <TextBlock x:Name="UserID" FontSize="18" Text="{Binding Path=UserID}" TextAlignment="Center" Margin="183,10,22.667,67" />
+
+                <TextBlock Text="Operator Name :" FontSize="18"
+                    TextAlignment="Center" VerticalAlignment="Center" Foreground="Black" Margin="29,51,176.667,26" />
+                <TextBlock x:Name="UserID_Copy" FontSize="18" Text="{Binding Path=UserName}" TextAlignment="Center" Margin="183,51,22.667,26" />
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+
+                <TextBlock Text="TurnOver :" FontSize="18"
+                    TextAlignment="Center" VerticalAlignment="Center" Foreground="Black" Margin="0,10,247.333,68" />
+                <TextBlock FontSize="25" FontFamily="Aria" Text="{Binding Path=Turnover}"
+                    TextAlignment="Center" VerticalAlignment="Center" Foreground="Black" Margin="39,37,165.333,28" Height="35" />
+
+                <Button x:Name="SettlementButton" Click="SettlementAll"
+                     Content="Settlement" HorizontalAlignment="Left" Margin="208,8,0,12" VerticalAlignment="Center" Width="123" Height="80">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8,8,8,8" x:Name="PART_Background">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                        <GradientStop Color="White" Offset="0.0" />
+                                        <GradientStop Color="Silver" Offset="0.5" />
+                                        <GradientStop Color="White" Offset="0.0" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" TargetName="PART_Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                                <GradientStop Color="LightGray" Offset="0.0" />
+                                                <GradientStop Color="Gray" Offset="0.5" />
+                                                <GradientStop Color="LightGray" Offset="0.0" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="0" Opacity="0.6" RenderingBias="Performance" ShadowDepth="0" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" TargetName="PART_Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                                <GradientStop Color="Silver" Offset="0.0" />
+                                                <GradientStop Color="White" Offset="0.5" />
+                                                <GradientStop Color="Silver" Offset="0.0" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid x:Name="SubmitContainer" Grid.Column="1" Grid.Row="1" Background="#f7e0a3">
+
+            <TextBlock Name="tBlockTime"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="68" Foreground="#00334e"/>
+
+        </Grid>
+
+    </Grid>
+</Page>
