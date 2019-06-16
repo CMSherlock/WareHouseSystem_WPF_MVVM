@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Coding_Things\WPF_Project\MVVM_WareHouse\MVVM_WareHouse\obj\Debug\
+d:\Coding_Things\Github\WareHouseSystem_WPF_MVVM\MVVM_WareHouse\obj\Debug\
 MVVM_WareHouse
 none
 false
 DEBUG;TRACE
-D:\Coding_Things\WPF_Project\MVVM_WareHouse\MVVM_WareHouse\App.xaml
-8-1454570092
-1326358539
-33316942839
-20-1167992969
+d:\Coding_Things\Github\WareHouseSystem_WPF_MVVM\MVVM_WareHouse\App.xaml
+8-2041009302
+11885798791
+37-961102007
+20-54670813
 View\InventoryListPage.xaml;View\MainWindow.xaml;View\StockGoodsWindow.xaml;View\TransactionListPage.xaml;View\CashierPage.xaml;View\DefaultPage.xaml;View\LoginWindow.xaml;View\ManagementPage.xaml;
 
-False
+True
 
